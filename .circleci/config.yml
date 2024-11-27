@@ -1,0 +1,31 @@
+version: 2.1
+
+jobs:
+  run-sql:
+    docker:
+      - image: circleci/python:3.9
+    environment:
+      SNOWFLAKE_USER: $SNOWFLAKE_USER
+      SNOWFLAKE_PASSWORD: $SNOWFLAKE_PASSWORD
+      SNOWFLAKE_ACCOUNT: $SNOWFLAKE_ACCOUNT
+      SNOWFLAKE_WAREHOUSE: $SNOWFLAKE_WAREHOUSE
+      SNOWFLAKE_DATABASE: $SNOWFLAKE_DATABASE
+      SNOWFLAKE_SCHEMA: $SNOWFLAKE_SCHEMA
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+      - run:
+          name: Run SQL script
+          command: |
+            export SQL_FILE_PATH=sql/dev/create_table.sql
+            python utils/run_sql.py
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - run-sql
