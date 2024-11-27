@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Run SQL script
           command: |
-            export SQL_FILE_PATH=sql/dev/create_table.sql
+            export SQL_FILE_PATH=sql/create_table.sql
             python utils/run_sql.py
 
 workflows:
